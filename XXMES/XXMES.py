@@ -1,7 +1,11 @@
 from PyQt5 import QtCore,QtWidgets,QtGui
 from PyQt5 import uic
-import sys,time,threading,keyboard
+import sys,time,threading 
+import keyboard,mouse
+
+
 import  引擎结构.新建组件 
+
 
 
 
@@ -17,7 +21,7 @@ class  MyWindow(QtWidgets.QMainWindow):
         self.ui=uic.loadUi(r'C:\2023工作\PyDev\XXMES\引擎结构-20230209.ui') 
         
         #设置label图片
-        self.ui.resize(200,350)
+        self.ui.resize(250,350)
         self.ui.label.setPixmap(QtGui.QPixmap(r'C:\2023工作\PyDev\XXMES\background.jpg'))     
         self.ui.horizontalSlider.valueChanged.connect(self.setOpacity)
         self.ui.setWindowFlags(QtCore.Qt.WindowStaysOnTopHint)
@@ -38,6 +42,46 @@ class  MyWindow(QtWidgets.QMainWindow):
         self.treeviewExecBtn.clicked.connect(self.execCreateNode)        
         self.mouseLocateTrigger.connect(引擎结构.新建组件.setTreeviewMouseLocate)
         
+        #可用角色控件
+        self.adminLocate=self.ui.lineEdit_2
+        self.sysAdminLocate=self.ui.lineEdit_3
+        self.engLocate=self.ui.lineEdit_4
+        self.engQLocate=self.ui.lineEdit_5
+        self.execCount=self.ui.spinBox
+        self.execUser=self.ui.pushButton_6
+        self.engCheck=self.ui.checkBox
+        self.engQCheck=self.ui.checkBox_2
+        
+        #指定角色位置
+        self.adminLocate.setText('1347,304')
+        self.sysAdminLocate.setText('1347,697')
+        self.engLocate.setText('1347,728')
+        self.engQLocate.setText('1347,760')
+        self.execUser.clicked.connect(self.execUserBtn)
+        
+        #包含组件
+        self.includeFrame=self.ui.frame_2
+        self.includeTree=self.ui.treeView_2
+        self.includeAddCTreeBtn=self.ui.pushButton_7
+        self.includeAddTreeBtn=self.ui.pushButton_8
+        self.includeCreateBtn=self.ui.pushButton_10
+        self.includeDeleteBtn=self.ui.pushButton_11
+        self.includeExecBtn=self.ui.pushButton_9
+        root=QtGui.QStandardItem('父组件')
+        self.model2=QtGui.QStandardItemModel(self)
+        self.model2.appendRow(root)
+        self.includeTree.setModel(self.model2)
+         
+        
+        
+        self.includeAddCTreeBtn.clicked.connect(self.includeAddCTreeCode)
+        self.includeAddTreeBtn.clicked.connect(self.includeAddTreeCode)
+        self.includeCreateBtn.clicked.connect(self.includeCreateCode)
+        self.includeDeleteBtn.clicked.connect(self.includeDeleteCode)
+        self.includeExecBtn.clicked.connect(self.includeExecCode)
+        
+        
+        
                       
         self.log('软件正在启动...',2000)
         self.log_trade=threading.Thread(target=self.logTrade)
@@ -47,45 +91,107 @@ class  MyWindow(QtWidgets.QMainWindow):
         #成品组件——新建组件 	
         self.tree=self.ui.treeView            
         self.model=QtGui.QStandardItemModel(self)
-        self.model.setHorizontalHeaderLabels(['组件树','位置']) 
+        self.model.setHorizontalHeaderLabels(['组件树']) 
         root= QtGui.QStandardItem('父组件')
         self.model.appendRow(root)
         self.tree.setModel(self.model)
         self.tree.setStyle(QtWidgets. QStyleFactory.create('windows'))
-        self.tree.setColumnWidth(0,150) 
-        self.tree.setColumnWidth(1,50) 
-        print('开始注册热键') 
-        try:        
-            time.sleep(0.1)
-           # keyboard.add_hotkey('ctrl',callback=引擎结构.新建组件.printMousePosition,suppress = False)
-            time.sleep(0.1)
-            #k.wait('esc')
-        except:
-            self.log('热键注册失败，请重试',3000)
-            return
-        else:
-            self.log('已注册热键,Ctrl 指定组件位置',3000)
+        self.tree.setColumnWidth(0,220) 
+        #self.tree.setColumnWidth(1,61) 
+        
     
-    #生成树
+    #包含组件——生成C系树
+    def includeAddCTreeCode(self):
+        self.log('生成C系树')
+        引擎结构.新建组件.includeAddCTreeCode(self)        
+        
+        
+    #包含组件——生成轻奢树
+    def includeAddTreeCode(self):
+        self.log('生成轻奢树')
+        引擎结构.新建组件.includeAddTreeCode(self)
+    
+    #包含组件——新建按钮
+    def includeCreateCode(self):
+        self.log('新建组件')
+        引擎结构.新建组件.includeCreateCode(self)
+        
+    #包含组件——删除按钮
+    def includeDeleteCode(self):
+        self.log('删除组件')
+        引擎结构.新建组件.includeDeleteCode(self)
+    
+    #包含组件——执行按钮
+    def includeExecCode(self):
+        self.log('执行包含组件')
+        引擎结构.新建组件.includeExecCode(self)
+        
+       
+    #可用角色——指定角色
+    def execUserBtn(self):
+        引擎结构.新建组件.execUserCode(self)
+    
+    #新建组件——生成树
     def CreateTreeBtn(self):
         pass
         引擎结构.新建组件.CreateTreeBtn(self)            
             
             
-    #添加子节点 
+    #新建组件——添加子节点 
     def addTreeNodeBtn(self):
-        引擎结构.新建组件.addTreeNodeBtn(self)   
-        
-    #删除子节点
+        引擎结构.新建组件.addTreeNodeBtn(self)         
+    #新建组件——删除子节点
     def delTreeNodeBtn(self):
         引擎结构.新建组件.delTreeNodeBtn(self)
-    #定位控件
+    #新建组件——定位控件
     def locTreeNodeBtn(self):
         引擎结构.新建组件.locTreeNodeBtn(self)    
-    #生成组件
+    #新建组件——生成组件
     def execCreateNode(self):
-        引擎结构.新建组件.execCreateNode(self)     
+        引擎结构.新建组件.execCreateNode(self)  
+        #print(self.model.rowCount())  
+        for index in range(self.model.rowCount()):
+            item=self.model.item(index)            
+            #print(item.text())            
+            if item.hasChildren():
+                for index in range(item.rowCount()):       
+                    item2=item.child(index) 
+                    self.execTreeCode(item,index,item2)                    
+                    if item2.hasChildren():
+                        for index in range(item2.rowCount()):
+                            item3=item2.child(index)
+                            #print(item3.text())
+                            self.execTreeCode(item2,index,item3)
+                            if item3.hasChildren():
+                                for index in range(item3.rowCount()):
+                                    item4=item3.child(index)
+                                    #print(item4.text())
+                                    self.execTreeCode(item3,index,item4)
+        self.log('组件建立完毕')
+                                    
+    def execTreeCode(self,root,index,item):
+        #轻奢00系          
+        self.move(1706,316) 
+        self.move(993,336) 
+        keyboard.write(root.text())
+                
+        self.log('请手动点击组件组件位置')
+        time.sleep(5) 
+       # x,y=mouse.get_position()
+        #mouse.click()         
+       
+        self.move(917,424) 
+        keyboard.write(item.text(),0.1) 
+        self.move(814,762)    
+        self.move(749,907)   
+        print(f'已建立组件：{item.text()}')
         
+    def move(self,x,y,t=0.5):
+        time.sleep(t)
+        mouse.move(x,y)
+        mouse.click()   
+    
+ 
            
         
     #状态栏常驻文本
